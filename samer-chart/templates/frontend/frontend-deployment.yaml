@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deployment
+  namespace: {{ .Values.namespace}}
+  labels:
+    app: frontend
+spec:
+  replicas: {{ .Values.frontend.replicas}}
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      imagePullSecrets:
+        - name: {{ .Values.imagePullSecrets}}
+      containers:
+      - name: frontend
+        image: {{ .Values.frontend.image.repository}}:{{ .Values.frontend.image.tag}}
+        imagePullPolicy: Always 
+        env: 
+          - name: BACKEND_URL
+            value: "http://backend-service:80"
+          - name: API_URL
+            value: "https://samer-kubernetes.infra-x.cloud"
+         
+        ports:
+        - containerPort: 80
