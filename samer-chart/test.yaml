@@ -1,0 +1,184 @@
+---
+# Source: samer-chart/templates/backend-secrets.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: backend-secrets
+  namespace: workshop-samer
+type: Opaque
+stringData:
+  ADMIN_DEFAULT_PASSWORD: "yIG8wsTGE9wLcAdipSFO"
+  JWT_SECRET: "CHANGE_ME_very_long_secret_at_least_32_chars"
+---
+# Source: samer-chart/templates/backend-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+  namespace: workshop-samer
+  labels: 
+    app: backend
+spec:
+  selector:
+    app: backend
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  type: ClusterIP
+
+---
+# Source: samer-chart/templates/frontend-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service
+  namespace: workshop-samer
+  labels: 
+    app: frontend
+spec:
+  selector:
+    app: frontend
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: ClusterIP
+
+---
+# Source: samer-chart/templates/backend-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+  namespace: workshop-samer
+  labels:
+    app: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      imagePullSecrets:
+        - name: ghcr-pull-secret
+      containers:
+      - name: backend
+        image: ghcr.io/samerrazzaqh/coursdevops/backend:latest
+        imagePullPolicy: Always 
+        env: 
+          - name: MONGODB_URI
+            value: "mongodb://praxis-form-mongodb.praxis.svc.cluster.local:27017/samer-praxis"
+          - name: JWT_EXP_MINUTES
+            value: "120"      
+          - name: ADMIN_DEFAULT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: backend-secrets
+                key: ADMIN_DEFAULT_PASSWORD
+          - name: JWT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: backend-secrets
+                key: JWT_SECRET
+        ports:
+        - containerPort: 8080
+      
+---
+# Source: samer-chart/templates/frontend-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deployment
+  namespace: workshop-samer
+  labels:
+    app: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      imagePullSecrets:
+        - name: ghcr-pull-secret
+      containers:
+      - name: frontend
+        image: ghcr.io/samerrazzaqh/coursdevops/frontend:latest
+        imagePullPolicy: Always 
+        env: 
+          - name: BACKEND_URL
+            value: "http://backend-service:80"
+          - name: API_URL
+            value: "https://samer-kubernetes.infra-x.cloud"
+         
+        ports:
+        - containerPort: 80
+---
+# Source: samer-chart/templates/ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+  name: samer-form-ingress
+  namespace: workshop-samer
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: samer-kubernetes.infra-x.cloud
+    http:
+      paths:
+      - backend:
+          service:
+            name: frontend-service
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+      - backend:
+          service:
+            name: backend-service
+            port:
+              number: 80
+        path: /api
+        pathType: Prefix
+      - backend:
+          service:
+            name: backend-service
+            port:
+              number: 80
+        path: /actuator
+        pathType: Prefix
+  tls:
+  - hosts:
+    - samer-kubernetes.infra-x.cloud
+    secretName: samer-form-tls
+
+  
+---
+# Source: samer-chart/templates/cert.yaml
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: samer-form-tls
+  namespace: workshop-samer
+spec:
+  dnsNames:
+    - samer-kubernetes.infra-x.cloud
+  issuerRef:
+    group: cert-manager.io
+    kind: ClusterIssuer
+    name: praxis-form-letsencrypt-prod
+  secretName: samer-form-tls
+  usages:
+  - digital signature
+  - key encipherment

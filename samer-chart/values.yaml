@@ -1,0 +1,17 @@
+namespace: workshop-samer
+backend:
+  replicas: 1
+  image:
+    repository: ghcr.io/samerrazzaqh/coursdevops/backend
+    tag: latest 
+  
+imagePullSecrets: ghcr-pull-secret
+
+frontend:
+  replicas: 1
+  image:
+    repository: ghcr.io/samerrazzaqh/coursdevops/frontend
+    tag: latest 
+
+
+
