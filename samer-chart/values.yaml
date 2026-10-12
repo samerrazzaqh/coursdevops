@@ -12,6 +12,28 @@ frontend:
   image:
     repository: ghcr.io/samerrazzaqh/coursdevops/frontend
     tag: latest 
+  env: 
+    - name: BACKEND_URL
+      value: "http://backend-service:80"
+    - name: API_URL
+      value: "https://samer-kubernetes.infra-x.cloud"
 
+grafana:
+  enabled: true
+
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+
+    path: /
+    pathType: Prefix
+
+    hosts:
+      - samer-grafana.infra-x.cloud
+
+    tls:
+      - secretName: samer-grafana-tls
+        hosts:
+          - samer-grafana.infra-x.cloud
 
 

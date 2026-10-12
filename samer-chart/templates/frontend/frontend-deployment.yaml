@@ -22,10 +22,9 @@ spec:
         image: {{ .Values.frontend.image.repository}}:{{ .Values.frontend.image.tag}}
         imagePullPolicy: Always 
         env: 
-          - name: BACKEND_URL
-            value: "http://backend-service:80"
-          - name: API_URL
-            value: "https://samer-kubernetes.infra-x.cloud"
-         
+          {{- range .Values.frontend.env}}
+            - name: {{ .name }}
+              value: {{ .value }}
+          {{- end}}
         ports:
         - containerPort: 80
