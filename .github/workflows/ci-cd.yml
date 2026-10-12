@@ -197,6 +197,9 @@ jobs:
       NAMESPACE: workshop-samer
     steps:
       - uses: actions/checkout@v4
+      - name: Set lowercase repo name
+        run: echo "REPO_LC=${GITHUB_REPOSITORY,,}" >> $GITHUB_ENV
+        
       - name: Set up Helm
         uses: azure/setup-helm@v4
       - name: Configure kubeconfig
