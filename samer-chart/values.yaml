@@ -1,6 +1,6 @@
 namespace: workshop-samer
 backend:
-  replicas: 3
+  replicas: 1
   image:
     repository: ghcr.io/samerrazzaqh/coursdevops/backend
     tag: latest 
