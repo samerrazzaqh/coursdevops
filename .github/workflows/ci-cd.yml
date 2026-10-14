@@ -186,7 +186,7 @@ jobs:
 
 
     # ============================================
-    # DEPLOY JOB (manuell via Helm auf Kubernetes) CH9 corse
+    # DEPLOY JOB (manuell via Helm auf Kubernetes) CH9 corse 
     # ============================================
             
   deploy:
