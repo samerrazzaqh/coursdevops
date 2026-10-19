@@ -211,7 +211,7 @@ jobs:
       - name: Deploy with Helm
         working-directory: ./samer-chart
         run: |
-          helm upgrade --install ecom-release . --create-namespace -n "${NAMESPACE}" \
+          helm upgrade --install samer-release . --create-namespace -n "${NAMESPACE}" \
             --set image.backend.image.repository=ghcr.io/${{ env.REPO_LC }}/backend \
             --set image.frontend.image.repository=ghcr.io/${{ env.REPO_LC }}/frontend
 
