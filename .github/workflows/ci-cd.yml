@@ -193,7 +193,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [docker-backend, docker-frontend]
     # if: github.event_name == 'workflow_dispatch'
-    env:
+    env: 
       NAMESPACE: workshop-samer
     steps:
       - uses: actions/checkout@v4
