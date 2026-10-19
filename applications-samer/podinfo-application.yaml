@@ -16,7 +16,10 @@ spec:
           enabled: true
           ingressClassName: nginx
           hosts:
-            - samer-podinfo.infra-x.cloud
+            - host: samer-podinfo.infra-x.cloud
+              paths:
+                - path: /
+                  pathType: Prefix
           tls:
             - secretName: samer-podinfo-tls
               hosts:
