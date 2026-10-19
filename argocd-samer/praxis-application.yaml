@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://github.com/samerrazzaqh/coursdevops.git
     targetRevision: main
-    path: samer-chart
+    path: samer-chart 
     helm:
       valueFiles:
         - values.yaml
