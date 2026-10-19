@@ -18,22 +18,22 @@ frontend:
     - name: API_URL
       value: "https://samer-kubernetes.infra-x.cloud"
 
-grafana:
-  enabled: true
+# grafana:
+#   enabled: true
 
-  ingress:
-    enabled: true
-    ingressClassName: nginx
+#   ingress:
+#     enabled: true
+#     ingressClassName: nginx
 
-    path: /
-    pathType: Prefix
+#     path: /
+#     pathType: Prefix
 
-    hosts:
-      - samer-grafana.infra-x.cloud
+#     hosts:
+#       - samer-grafana.infra-x.cloud
 
-    tls:
-      - secretName: samer-grafana-tls
-        hosts:
-          - samer-grafana.infra-x.cloud
+#     tls:
+#       - secretName: samer-grafana-tls
+#         hosts:
+#           - samer-grafana.infra-x.cloud
 
 

@@ -1,0 +1,31 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: samer-grafana
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://grafana-community.github.io/helm-charts/
+    targetRevision: 13.4.0
+    chart: grafana
+    helm:
+      values: |
+        ingress:
+          enabled: true
+          ingressClassName: nginx
+          hosts:
+            - samer-grafana.infra-x.cloud
+          tls:
+            - secretName: samer-grafana-tls
+              hosts:
+                - samer-grafana.infra-x.cloud
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: workshop-samer
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
