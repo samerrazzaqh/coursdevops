@@ -8,7 +8,7 @@ backend:
 imagePullSecrets: ghcr-pull-secret
 
 frontend:
-  replicas: 1
+  replicas: 2
   image:
     repository: ghcr.io/samerrazzaqh/coursdevops/frontend
     tag: latest 
