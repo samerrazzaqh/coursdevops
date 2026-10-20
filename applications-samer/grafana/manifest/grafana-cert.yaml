@@ -9,7 +9,7 @@ spec:
   issuerRef:
     group: cert-manager.io
     kind: ClusterIssuer
-    name: praxis-form-letsencrypt-prod
+    name: praxis-form-letsencrypt-staging
   secretName: samer-grafana-tls
   usages:
   - digital signature
