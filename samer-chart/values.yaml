@@ -18,6 +18,11 @@ frontend:
     - name: API_URL
       value: "https://samer-kubernetes.infra-x.cloud"
 
+
+
+
+
+
 # grafana:
 #   enabled: true
 
