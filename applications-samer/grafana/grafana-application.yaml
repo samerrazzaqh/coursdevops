@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: samer-grafana
-  namespace: argocd
+  namespace: workshop-samer
 spec:
   project: default
   source:
