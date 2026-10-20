@@ -2,9 +2,9 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: samer-grafana
-  namespace: workshop-samer
+  namespace: argocd
 spec:
-  project: default 
+  project: default
   source:
     repoURL: https://grafana-community.github.io/helm-charts/
     targetRevision: 13.4.0
