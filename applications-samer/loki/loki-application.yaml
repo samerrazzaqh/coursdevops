@@ -7,7 +7,7 @@ spec:
   project: default
   source:
     chart: loki
-    repoURL: https://grafana-community.github.io/helm-charts
+    repoURL: https://prometheus-community.github.io/helm-charts/
     targetRevision: 19.0.3 
     helm:
       values: |
@@ -17,10 +17,8 @@ spec:
           hosts:
             - loki.infra-v.cloud
         
+        # فرض العمل بنظام الحاوية المفردة لتجاوز فحص الـ distributed
         deploymentMode: SingleBinary
-        
-        singleBinary:
-          replicas: 1
 
         loki:
           auth_enabled: false
@@ -41,6 +39,7 @@ spec:
                   prefix: index_
                   period: 24h
 
+        # تعطيل المكونات الموزعة صراحةً لكي لا تفشل الـ validation
         backend:
           replicas: 0
         read:
@@ -49,8 +48,7 @@ spec:
           replicas: 0
         
         compactor:
-          shared_store: filesystem
-          retention_enabled: false
+          enabled: false
 
   destination:
     server: https://kubernetes.default.svc
