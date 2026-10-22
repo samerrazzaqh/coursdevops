@@ -17,18 +17,41 @@ spec:
           hosts:
             - loki.infra-v.cloud
         
+        deploymentMode: SingleBinary
+        
         loki:
-          useTestSchema: true
           auth_enabled: false
+          commonConfig:
+            replication_factor: 1
           storage:
             type: filesystem
             filesystem:
               chunks_directory: /var/loki/chunks
               rules_directory: /var/loki/rules
+          schemaConfig:
+            configs:
+              - from: "2024-04-01"
+                store: tsdb
+                object_store: filesystem
+                schema: v13
+                index:
+                  prefix: index_
+                  period: 24h
 
-        deploymentMode: SingleBinary
         singleBinary:
           replicas: 1
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+
+        chunksCache:
+          enabled: false
+        resultsCache:
+          enabled: false
 
         backend:
           replicas: 0
