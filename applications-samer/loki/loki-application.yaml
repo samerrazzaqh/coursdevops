@@ -7,7 +7,7 @@ spec:
   project: default
   source:
     chart: loki
-    repoURL: https://prometheus-community.github.io/helm-charts/
+    repoURL: https://grafana-community.github.io/helm-charts/
     targetRevision: 19.0.3 
     helm:
       values: |
@@ -17,38 +17,27 @@ spec:
           hosts:
             - loki.infra-v.cloud
         
-        # فرض العمل بنظام الحاوية المفردة لتجاوز فحص الـ distributed
-        deploymentMode: SingleBinary
-
         loki:
           auth_enabled: false
-          commonConfig:
-            replication_factor: 1
           storage:
             type: filesystem
+            # إضافة أسماء الحاويات المطلوبة لتجاوز الخطأ
+            bucketNames:
+              chunks: loki-chunks
+              ruler: loki-ruler
+              admin: loki-admin
             filesystem:
               chunks_directory: /var/loki/chunks
               rules_directory: /var/loki/rules
           schema_config:
             configs:
-              - from: 2024-04-01
+              - from: "2024-04-01"
                 store: tsdb
                 object_store: filesystem
                 schema: v13
                 index:
                   prefix: index_
                   period: 24h
-
-        # تعطيل المكونات الموزعة صراحةً لكي لا تفشل الـ validation
-        backend:
-          replicas: 0
-        read:
-          replicas: 0
-        write:
-          replicas: 0
-        
-        compactor:
-          enabled: false
 
   destination:
     server: https://kubernetes.default.svc
