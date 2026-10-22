@@ -7,7 +7,7 @@ spec:
   project: default
   source:
     chart: loki
-    repoURL: https://grafana-community.github.io/helm-charts/
+    repoURL: https://grafana-community.github.io/helm-charts
     targetRevision: 19.0.3 
     helm:
       values: |
@@ -17,7 +17,6 @@ spec:
           hosts:
             - loki.infra-v.cloud
         
-        # تفعيل الوضع البسيط (Monolithic) لتجنب أخطاء الـ distributed
         deploymentMode: SingleBinary
         
         singleBinary:
