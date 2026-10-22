@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: alloy
+  namespace: argocd
+spec:
+  project: default
+  source:
+    chart: alloy
+    repoURL: https://grafana.github.io/helm-charts
+    targetRevision: 1.14.1  
+    helm:
+      values: |
+        controller:
+          type: daemonset 
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: monitoring-samer
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true
+    syncOptions:
+      - CreateNamespace=true
