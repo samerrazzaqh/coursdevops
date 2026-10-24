@@ -1,0 +1,20 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: require-deployment-team-label
+  namespace: kyverno-samer
+spec:
+  validationFailureAction: enforce # خيارات أخرى: audit (للتسجيل فقط دون منع)
+  rules:
+    - name: require-deployment-team-label
+      match:
+        any:
+          - resources:
+              kinds:
+                - Deployment
+      validate:
+        message: "You must have label team for all deployments"
+        pattern:
+          metadata:
+            labels:
+              team: "?*" # الشرط هنا يعني أن القيمة يجب ألا تكون فارغة وتحتوي على حرف واحد على الأقل

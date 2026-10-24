@@ -1,0 +1,19 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: minimum-replicas
+  namespace: kyverno-samer
+spec:
+  validationFailureAction: enforce
+  rules:
+    - name: minimum-replicas
+      match:
+        any:
+          - resources:
+              kinds:
+                - Deployment
+      validate:
+        message: "Must have a minimum of 3 replicas in a deployment"
+        pattern:
+          spec:
+            replicas: ">=3"

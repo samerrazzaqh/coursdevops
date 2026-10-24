@@ -1,0 +1,32 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: no-latest-tag-policy
+  namespace: kyverno-samer
+spec:
+  validationFailureAction: enforce
+  rules:
+    - name: require-image-tag
+      match:
+        any:
+          - resources:
+              kinds:
+                - Pod
+      validate:
+        message: "Must use an image tag"
+        pattern:
+          spec:
+            containers:
+              - image: "*:*" # يتطلب وجود كولون (tag)
+    - name: dont-allow-latest-tag
+      match:
+        any:
+          - resources:
+              kinds:
+                - Pod
+      validate:
+        message: "Can't use latest tag"
+        pattern:
+          spec:
+            containers:
+              - image: "!*:latest" # علامة التعجب تعني (ليس latest)

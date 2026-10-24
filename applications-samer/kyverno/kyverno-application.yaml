@@ -1,0 +1,29 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kyverno
+  namespace: argocd
+spec:
+  project: default
+  source:
+    chart: kyverno
+    repoURL: https://kyverno.github.io/kyverno/
+    targetRevision: 3.9.2
+    helm:
+      valuesObject:
+        metrics:
+          serviceMonitor:
+            enabled: true
+            namespace: monitoring-samer
+            additionalLabels:
+              release: prometheus-kps
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kyverno-samer
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
