@@ -17,12 +17,16 @@ spec:
             ingressClassName: nginx
             hosts:
               - prometheus.infra-v.cloud
+        extraScrapeConfigs: |
+          - job_name: 'policy-reporter'
+            static_configs:
+              - targets: ['policy-reporter.monitoring-samer.svc.cluster.local:8080']
   destination:
     server: https://kubernetes.default.svc
     namespace: monitoring-samer
   syncPolicy:
     automated:
-      selfHeal: true
       prune: true
+      selfHeal: true
     syncOptions:
       - CreateNamespace=true

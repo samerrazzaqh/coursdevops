@@ -20,6 +20,22 @@ spec:
               - secretName: samer-grafana-tls
                 hosts:
                   - samer-grafana.infra-x.cloud
+          
+          datasources:
+            datasources.yaml:
+              apiVersion: 1
+              datasources:
+                - name: Prometheus
+                  type: prometheus
+                  access: proxy
+                  url: http://prometheus-server.monitoring-samer.svc.cluster.local
+                  isDefault: true
+                - name: Loki
+                  type: loki
+                  access: proxy
+                  url: http://loki.monitoring-samer.svc.cluster.local:3100
+                  isDefault: false
+
     - repoURL: https://github.com/samerrazzaqh/coursdevops.git
       targetRevision: main
       path: applications-samer/grafana/manifest
