@@ -12,20 +12,20 @@ spec:
         - path:
             type: PathPrefix
             value: /
-        backendRefs:
+      backendRefs:
         - name: frontend-service
-        port: 80
+          port: 80
     - matches:
         - path:
             type: PathPrefix
             value: /api
-        backendRefs:
+      backendRefs:
         - name: backend-service
-        port: 80
+          port: 80
     - matches:
         - path:
             type: PathPrefix
             value: /actuator
-        backendRefs:
+      backendRefs:
         - name: backend-service
-        port: 80
+          port: 80
