@@ -5,7 +5,7 @@ metadata:
   namespace: workshop-samer
 spec:
   gatewayClassName: nginx
-  listeners:
+  listeners: 
     - name: http
       protocol: HTTP
       port: 80
